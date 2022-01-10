@@ -1,14 +1,26 @@
-import React, { useEffect } from 'react';
-import ProductItem from '../ProductItem';
-import { useStoreContext } from '../../utils/GlobalState';
-import { UPDATE_PRODUCTS } from '../../utils/actions';
-import { useQuery } from '@apollo/client';
-import { QUERY_PRODUCTS } from '../../utils/queries';
-import { idbPromise } from '../../utils/helpers';
-import spinner from '../../assets/spinner.gif';
+import React, { useEffect } from "react";
+import ProductItem from "../ProductItem";
+/////////////// Context API ////////////////////////////////////////////
+// import { useStoreContext } from "../../utils/GlobalState";
+/////////////// Context API ////////////////////////////////////////////
+import { UPDATE_PRODUCTS } from "../../utils/actions";
+import { useQuery } from "@apollo/client";
+import { QUERY_PRODUCTS } from "../../utils/queries";
+import { idbPromise } from "../../utils/helpers";
+import spinner from "../../assets/spinner.gif";
+////////////////////////////// Redux ///////////////////////////////////
+import { useDispatch, useSelector } from "react-redux";
+////////////////////////////// Redux ///////////////////////////////////
 
 function ProductList() {
-  const [state, dispatch] = useStoreContext();
+  /////////////// Context API ////////////////////////////////////////////
+  // const [state, dispatch] = useStoreContext();
+  /////////////// Context API ////////////////////////////////////////////
+
+  ////////////////////////////// Redux ///////////////////////////////////
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  ////////////////////////////// Redux ///////////////////////////////////
 
   const { currentCategory } = state;
 
@@ -21,10 +33,10 @@ function ProductList() {
         products: data.products,
       });
       data.products.forEach((product) => {
-        idbPromise('products', 'put', product);
+        idbPromise("products", "put", product);
       });
     } else if (!loading) {
-      idbPromise('products', 'get').then((products) => {
+      idbPromise("products", "get").then((products) => {
         dispatch({
           type: UPDATE_PRODUCTS,
           products: products,

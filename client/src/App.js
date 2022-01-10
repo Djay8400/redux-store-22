@@ -1,33 +1,39 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
   createHttpLink,
-} from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 
-import Home from './pages/Home';
-import Detail from './pages/Detail';
-import NoMatch from './pages/NoMatch';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Nav from './components/Nav';
-import { StoreProvider } from './utils/GlobalState';
-import Success from './pages/Success';
-import OrderHistory from './pages/OrderHistory';
+import Home from "./pages/Home";
+import Detail from "./pages/Detail";
+import NoMatch from "./pages/NoMatch";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Nav from "./components/Nav";
+/////////////// Context API ////////////////////////////////////////////
+// import { StoreProvider } from "./utils/GlobalState";
+/////////////// Context API ////////////////////////////////////////////
+import Success from "./pages/Success";
+import OrderHistory from "./pages/OrderHistory";
+////////////////////////////// Redux ///////////////////////////////////
+import { Provider } from "react-redux";
+import store from "./utils/store";
+////////////////////////////// Redux ///////////////////////////////////
 
 const httpLink = createHttpLink({
-  uri: '/graphql',
+  uri: "/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('id_token');
+  const token = localStorage.getItem("id_token");
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : '',
+      authorization: token ? `Bearer ${token}` : "",
     },
   };
 });
@@ -42,7 +48,17 @@ function App() {
     <ApolloProvider client={client}>
       <Router>
         <div>
-          <StoreProvider>
+          {
+            /////////////// Context API ////////////////////////////////////////////
+          }
+          {/* <StoreProvider> */}
+          {
+            /////////////// Context API ////////////////////////////////////////////
+            ////////////////////////////// Redux ///////////////////////////////////
+          }
+          <Provider store={store}>
+            {/* ////////////////////////////// Redux ///////////////////////////////////
+             */}
             <Nav />
             <Switch>
               <Route exact path="/" component={Home} />
@@ -53,7 +69,17 @@ function App() {
               <Route exact path="/products/:id" component={Detail} />
               <Route component={NoMatch} />
             </Switch>
-          </StoreProvider>
+            {/* ////////////////////////////// Redux ///////////////////////////////////
+             */}
+          </Provider>
+          {
+            ////////////////////////////// Redux ///////////////////////////////////
+            /////////////// Context API ////////////////////////////////////////////
+          }
+          {/* </StoreProvider> */}
+          {
+            /////////////// Context API ////////////////////////////////////////////
+          }
         </div>
       </Router>
     </ApolloProvider>
